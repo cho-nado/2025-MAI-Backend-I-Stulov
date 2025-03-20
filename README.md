@@ -22,9 +22,3 @@ SchoolMind is a web-based platform designed to enhance students’ learning expe
 - **API Integration**  
   Provides endpoints for various functionalities (user management, courses, tasks, etc.) and supports future microservice expansions.
 
-## Getting Started
-
-1. **Clone the Repository**  
-   ```bash
-   git clone https://github.com/your-username/schoolmind.git
-   cd schoolmind
