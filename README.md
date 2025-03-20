@@ -1,14 +1,30 @@
-# LRU Cache Demo
+# SchoolMind: A Web Application for Supplementary School Education
 
-This repository contains a simple implementation of an LRU (Least Recently Used) cache in Python.
+SchoolMind is a web-based platform designed to enhance students’ learning experience through additional educational resources and interactive tools. The project aims to support young learners by offering personalized materials, tracking progress, and simplifying communication between teachers, students, and parents.
 
-## Features
-- O(1) time complexity for `get`, `set`, and `rem` operations.
-- Utilizes `OrderedDict` to maintain the order of recently used items.
+## Key Features
 
-## Installation
-1. Clone the repository
-2. Create and activate a virtual environment
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
+- **Supplementary Education Content**  
+  Provides extra lessons, exercises, and quizzes tailored for students in lower grades, focusing on Python programming and other STEM subjects.
+
+- **Personalized Learning**  
+  Plans to integrate machine learning models (e.g., SVGP) to recommend tasks and adapt content based on each student’s progress and performance.
+
+- **Progress Tracking**  
+  Allows teachers and parents to monitor a student’s achievements, identify knowledge gaps, and receive insights into areas needing improvement.
+
+- **LRU Caching Mechanism**  
+  Implements a custom LRU cache to optimize performance when handling frequent requests and storing recently accessed data.
+
+- **Django Backend**  
+  Utilizes Django (Python) for a robust, scalable backend structure, featuring a clear separation of concerns and easy extensibility.
+
+- **API Integration**  
+  Provides endpoints for various functionalities (user management, courses, tasks, etc.) and supports future microservice expansions.
+
+## Getting Started
+
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/your-username/schoolmind.git
+   cd schoolmind
