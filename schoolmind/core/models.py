@@ -13,6 +13,13 @@ class Profile(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    
+    # Новые обязательные поля для имени и фамилии, отчество опционально
+    first_name = models.CharField(max_length=50, default='')
+    last_name = models.CharField(max_length=50, default='')
+    middle_name = models.CharField(max_length=50, blank=True, null=True)  # остаётся необязательным
+
+    
     bio = models.TextField(blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True)
@@ -22,7 +29,15 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.user.username} ({self.role})"
+        return f"{self.first_name} {self.last_name} ({self.role})"
+    
+    def save(self, *args, **kwargs):
+        # Если у профиля уже установлен связанный пользователь, обновляем его имя и фамилию
+        if self.user:
+            self.user.first_name = self.first_name
+            self.user.last_name = self.last_name
+            self.user.save()
+        super().save(*args, **kwargs)
 
 
 # =========================

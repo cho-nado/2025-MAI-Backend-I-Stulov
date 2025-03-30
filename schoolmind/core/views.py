@@ -1,5 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.models import User
@@ -16,14 +17,22 @@ def search_profile_view(request):
     query = request.GET.get('q', '')
     if not query:
         return JsonResponse({"error": "No query provided"}, status=400)
-    profiles = Profile.objects.filter(user__username__icontains=query) | Profile.objects.filter(role__icontains=query)
-    profiles = profiles.distinct()
+    
+    # Фильтруем по first_name и last_name, а также можно оставить поиск по username и role, если нужно
+    profiles = Profile.objects.filter(
+        Q(first_name__icontains=query) | Q(last_name__icontains=query) | 
+        Q(user__username__icontains=query) | Q(role__icontains=query)
+    ).distinct()
+    
     result = []
     for profile in profiles:
         result.append({
             "id": profile.id,
             "username": profile.user.username,
             "role": profile.role,
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "middle_name": profile.middle_name,
             "bio": profile.bio,
             "address": profile.address,
         })
@@ -38,6 +47,9 @@ def list_profiles_view(request):
             "id": profile.id,
             "username": profile.user.username,
             "role": profile.role,
+            "first_name": profile.first_name,
+            "last_name": profile.last_name,
+            "middle_name": profile.middle_name,
             "bio": profile.bio,
             "address": profile.address,
         })
@@ -50,21 +62,46 @@ def create_profile_view(request):
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
+    
     username = data.get("username")
     password = data.get("password")
     role = data.get("role")
     bio = data.get("bio", "")
     address = data.get("address", "")
-    if not username or not password or not role:
-        return JsonResponse({"error": "Missing required fields (username, password, role)"}, status=400)
+    
+    # Новые обязательные поля для полного имени
+    first_name = data.get("first_name")
+    last_name = data.get("last_name")
+    middle_name = data.get("middle_name", "")
+    
+    if not (username and password and role and first_name and last_name):
+        return JsonResponse(
+            {"error": "Missing required fields (username, password, role, first_name, last_name)"},
+            status=400
+        )
+    
     if User.objects.filter(username=username).exists():
         return JsonResponse({"error": "Username already exists"}, status=400)
+    
+    # Создаем пользователя, затем профиль, передавая новые поля
     user = User.objects.create_user(username=username, password=password)
-    profile = Profile.objects.create(user=user, role=role, bio=bio, address=address)
+    profile = Profile.objects.create(
+        user=user,
+        role=role,
+        bio=bio,
+        address=address,
+        first_name=first_name,
+        last_name=last_name,
+        middle_name=middle_name
+    )
+    
     return JsonResponse({
         "id": profile.id,
         "username": profile.user.username,
         "role": profile.role,
+        "first_name": profile.first_name,
+        "last_name": profile.last_name,
+        "middle_name": profile.middle_name,
         "bio": profile.bio,
         "address": profile.address,
     }, status=201)
