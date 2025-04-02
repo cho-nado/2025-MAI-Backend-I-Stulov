@@ -1,4 +1,4 @@
-.PHONY: migrate build up down
+.PHONY: migrate build up down createsuperuser createcustomsuperuser
 
 build:
 	docker compose build
@@ -11,3 +11,11 @@ down:
 
 migrate:
 	docker compose run web python schoolmind/manage.py migrate
+
+createsuperuser:
+	docker compose run web python schoolmind/manage.py createsu
+
+createcustomsuperuser:
+	docker compose run web python schoolmind/manage.py createsuperuser
+
+
