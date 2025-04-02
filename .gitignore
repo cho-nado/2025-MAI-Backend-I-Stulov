@@ -9,3 +9,6 @@ __pycache__/
 # Файлы IDE
 .idea/
 .vscode/
+
+public/static/
+
