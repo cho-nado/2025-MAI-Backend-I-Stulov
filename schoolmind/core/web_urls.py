@@ -7,4 +7,5 @@ urlpatterns = [
     path('course/', web_views.course_web_view, name='web_course'),
     path('courseschedule/', web_views.courseschedule_web_view, name='web_courseschedule'),
     path('attendance/', web_views.attendance_web_view, name='web_attendance'),
+    path('health/',             web_views.health_check,           name='health'),
 ]

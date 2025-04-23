@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 def profile_web_view(request):
     return HttpResponse("<h1>Профили</h1>")
@@ -14,3 +14,9 @@ def courseschedule_web_view(request):
 
 def attendance_web_view(request):
     return HttpResponse("<h1>Посещаемость</h1>")
+
+def health_check(request):
+    """
+    Простая «живая» проверка — возвращает 200, если приложение запущено.
+    """
+    return JsonResponse({"status": "ok"})
