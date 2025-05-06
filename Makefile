@@ -18,4 +18,9 @@ createsuperuser:
 createcustomsuperuser:
 	docker compose run web python schoolmind/manage.py createsuperuser
 
+test:
+	docker compose run web pytest schoolmind/core/tests/ -m "not selenium"
 
+coverage:
+	docker compose run web coverage run -m pytest schoolmind/core/tests/ -m "not selenium"
+	docker compose run web coverage report
