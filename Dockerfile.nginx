@@ -1,0 +1,13 @@
+FROM nginx:latest
+
+# ставим htpasswd
+RUN apt-get update && apt-get install -y apache2-utils && rm -rf /var/lib/apt/lists/*
+
+# копируем конфиг и скрипт
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY entrypoint-nginx.sh /entrypoint-nginx.sh
+
+# даём права на исполнение именно этому файлу
+RUN chmod +x /entrypoint-nginx.sh
+
+ENTRYPOINT ["/entrypoint-nginx.sh"]

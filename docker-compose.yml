@@ -34,17 +34,22 @@ services:
       start_period: 10s
 
   nginx:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     ports:
       - "8080:80"
+    # вместо монтирования только статических файлов —
+    # монтируем всю папку public целиком под /usr/share/nginx/html/public
     volumes:
-      # Статика хранится в папке public/
-      - ./public/static:/usr/share/nginx/html/static:ro
-      #- ./public:/usr/share/nginx/html:ro
-      # Настроен собственный nginx.conf в корне проекта
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./public:/usr/share/nginx/html/public:ro
+    environment:
+      - BASIC_AUTH_USER=admin
+      - BASIC_AUTH_PASSWORD=12345
     depends_on:
       - web
 
+
+    
 volumes:
   pgdata:
